@@ -12,7 +12,7 @@ class SpaceRocks:
         pygame.init()
         pygame.display.set_caption("Space Rocks")
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 64)
+        self.font = pygame.font.Font(None, 32)
         self.message = ""
 
         self.screen = pygame.display.set_mode((800, 600))
@@ -43,6 +43,7 @@ class SpaceRocks:
                 elif event.key == pygame.K_SPACE and self.turn==False:
                     self.message=None
                     self.turn=True
+                    return SpaceRocks()
                     
                     
 
@@ -98,7 +99,11 @@ class SpaceRocks:
                     break
 
         if not rocks and self.ship:
-            self.message = "You won!"
+            self.message = "You won! Press Space to start new game."
+            self.turn=False
+            self.ship = Spaceship((400, 300))
+            
+        
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
