@@ -25,7 +25,7 @@ class SpaceRocks:
             Rock.create_random(self.screen, self.ship.position)
             for _ in range(6)
         ]
-
+    turn= True
     def main_loop(self):
         while True:
             self._handle_input()
@@ -33,28 +33,32 @@ class SpaceRocks:
             self._draw()
 
     def _handle_input(self):
+                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and self.turn==True:
                     self.ship.shoot()
+                elif event.key == pygame.K_SPACE and self.turn==False:
+                    self.message=None
+                    self.turn=True
+                    
+                    
 
         is_key_pressed = pygame.key.get_pressed()
         if is_key_pressed[pygame.K_ESCAPE] or is_key_pressed[pygame.K_q]:
             quit()
 
-        if self.ship is None:
-            return
-
-        if is_key_pressed[pygame.K_RIGHT]:
-            self.ship.rotate(clockwise=True)
-        elif is_key_pressed[pygame.K_LEFT]:
-            self.ship.rotate(clockwise=False)
-        elif is_key_pressed[pygame.K_UP]:
-            self.ship.accelerate()
-        elif is_key_pressed[pygame.K_DOWN]:
-            self.ship.deaccelerate()
+        if self.turn:
+            if is_key_pressed[pygame.K_RIGHT]:
+                self.ship.rotate(clockwise=True)
+            elif is_key_pressed[pygame.K_LEFT]:
+                self.ship.rotate(clockwise=False)
+            elif is_key_pressed[pygame.K_UP]:
+                self.ship.accelerate()
+            elif is_key_pressed[pygame.K_DOWN]:
+                self.ship.deaccelerate()
 
     @property
     def game_objects(self):
@@ -88,8 +92,9 @@ class SpaceRocks:
         if self.ship:
             for rock in rocks[:]:
                 if rock.collides_with(self.ship):
-                    self.ship = None
-                    self.message = "You lost!"
+                    self.turn=False
+                    self.message = "You lost! \n Press Space to Try Again"
+                    self.ship = Spaceship((400, 300))
                     break
 
         if not rocks and self.ship:

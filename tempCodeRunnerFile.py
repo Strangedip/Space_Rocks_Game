@@ -1,0 +1,2 @@
+
+                    bullets.remove(bullet)
